@@ -7,10 +7,10 @@ import (
 
 type Handler struct {
 	service service.TaskService
-	logger  adapters.Logger
+	logger  adapters.ILogger
 }
 
-func NewHandler(service service.TaskService, logger adapters.Logger) *Handler {
+func NewHandler(service service.TaskService, logger adapters.ILogger) *Handler {
 	return &Handler{
 		service: service,
 		logger:  logger,

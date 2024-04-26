@@ -17,10 +17,10 @@ type TaskService interface {
 type taskService struct {
 	repo   repositories.TaskRepository
 	redis  repositories.RedisRepository
-	logger adapters.Logger
+	logger adapters.ILogger
 }
 
-func NewService(repo repositories.TaskRepository, redis repositories.RedisRepository, logger adapters.Logger) TaskService {
+func NewService(repo repositories.TaskRepository, redis repositories.RedisRepository, logger adapters.ILogger) TaskService {
 	return taskService{
 		repo:   repo,
 		redis:  redis,

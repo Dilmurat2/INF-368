@@ -6,25 +6,27 @@ import (
 	"time"
 )
 
-type Logger interface {
+type ILogger interface {
 	Info(msg string, value interface{})
 	Error(msg string, value interface{})
 }
 
-type logger struct {
-	zerolog.Logger
+var _ ILogger = (*Logger)(nil)
+
+type Logger struct {
+	lg zerolog.Logger
 }
 
-func NewLogger() Logger {
+func NewLogger() *Logger {
 	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339, NoColor: false}
 	loggerCall := zerolog.New(output).With().Timestamp().Caller().Logger()
-	return &logger{loggerCall}
+	return &Logger{loggerCall}
 }
 
-func (l *logger) Info(msg string, value interface{}) {
-	l.Logger.Info().Interface(msg, value).Send()
+func (l *Logger) Info(msg string, value interface{}) {
+	l.lg.Info().Interface(msg, value).Send()
 }
 
-func (l *logger) Error(msg string, value interface{}) {
-	l.Logger.Error().Interface(msg, value).Send()
+func (l *Logger) Error(msg string, value interface{}) {
+	l.lg.Error().Interface(msg, value).Send()
 }
