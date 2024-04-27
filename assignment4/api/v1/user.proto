@@ -2,17 +2,16 @@ syntax  = "proto3";
 
 package assingment4;
 
-option go_package = "proto/pb";
-
 service UserService {
-  rpc CreateUser(User) returns (UserResponse);
-  rpc GetUser(UserRequest) returns (User);
+  rpc CreateUser(User) returns (CreateUserResponse);
+  rpc GetUser(GetUserByIdRequest) returns (User);
   rpc ListUsers(EmptyRequest) returns (UserList);
 }
 
 message EmptyRequest {}
 
 message User {
+    int32 id = 1;
     string name = 2;
     string email = 3;
 }
@@ -21,10 +20,10 @@ message UserList {
     repeated User users = 1;
 }
 
-message UserRequest {
+message GetUserByIdRequest {
     int32 id = 1;
 }
 
-message UserResponse {
+message CreateUserResponse {
     int32 userId = 1;
 }

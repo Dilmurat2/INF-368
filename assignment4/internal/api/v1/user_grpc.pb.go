@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v4.24.3
-// source: user.proto
+// source: api/v1/user.proto
 
-package pb
+package protos
 
 import (
 	context "context"
@@ -18,12 +18,12 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// UserServiceClient is the client API for UserService services.
+// UserServiceClient is the client API for UserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserResponse, error)
-	GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*User, error)
+	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	GetUser(ctx context.Context, in *GetUserByIdRequest, opts ...grpc.CallOption) (*User, error)
 	ListUsers(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*UserList, error)
 }
 
@@ -35,8 +35,8 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserResponse, error) {
-	out := new(UserResponse)
+func (c *userServiceClient) CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+	out := new(CreateUserResponse)
 	err := c.cc.Invoke(ctx, "/assingment4.UserService/CreateUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func (c *userServiceClient) CreateUser(ctx context.Context, in *User, opts ...gr
 	return out, nil
 }
 
-func (c *userServiceClient) GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*User, error) {
+func (c *userServiceClient) GetUser(ctx context.Context, in *GetUserByIdRequest, opts ...grpc.CallOption) (*User, error) {
 	out := new(User)
 	err := c.cc.Invoke(ctx, "/assingment4.UserService/GetUser", in, out, opts...)
 	if err != nil {
@@ -62,12 +62,12 @@ func (c *userServiceClient) ListUsers(ctx context.Context, in *EmptyRequest, opt
 	return out, nil
 }
 
-// UserServiceServer is the server API for UserService services.
+// UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
-	CreateUser(context.Context, *User) (*UserResponse, error)
-	GetUser(context.Context, *UserRequest) (*User, error)
+	CreateUser(context.Context, *User) (*CreateUserResponse, error)
+	GetUser(context.Context, *GetUserByIdRequest) (*User, error)
 	ListUsers(context.Context, *EmptyRequest) (*UserList, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -76,10 +76,10 @@ type UserServiceServer interface {
 type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) CreateUser(context.Context, *User) (*UserResponse, error) {
+func (UnimplementedUserServiceServer) CreateUser(context.Context, *User) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedUserServiceServer) GetUser(context.Context, *UserRequest) (*User, error) {
+func (UnimplementedUserServiceServer) GetUser(context.Context, *GetUserByIdRequest) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedUserServiceServer) ListUsers(context.Context, *EmptyRequest) (*UserList, error) {
@@ -87,7 +87,7 @@ func (UnimplementedUserServiceServer) ListUsers(context.Context, *EmptyRequest) 
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
-// UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this services.
+// UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to UserServiceServer will
 // result in compilation errors.
 type UnsafeUserServiceServer interface {
@@ -117,7 +117,7 @@ func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec f
 }
 
 func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserRequest)
+	in := new(GetUserByIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/assingment4.UserService/GetUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetUser(ctx, req.(*UserRequest))
+		return srv.(UserServiceServer).GetUser(ctx, req.(*GetUserByIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -152,7 +152,7 @@ func _UserService_ListUsers_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-// UserService_ServiceDesc is the grpc.ServiceDesc for UserService services.
+// UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserService_ServiceDesc = grpc.ServiceDesc{
@@ -173,5 +173,5 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "user.proto",
+	Metadata: "api/v1/user.proto",
 }

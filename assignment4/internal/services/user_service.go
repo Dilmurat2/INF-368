@@ -1,8 +1,8 @@
 package services
 
 import (
-	"assingment4/models"
-	"assingment4/repository"
+	"assingment4/internal/models"
+	"assingment4/internal/repository"
 )
 
 type UserService interface {

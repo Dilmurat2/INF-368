@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"assingment4/config"
-	"assingment4/models"
+	"assingment4/internal/config"
+	"assingment4/internal/models"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

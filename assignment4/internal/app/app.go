@@ -1,11 +1,11 @@
-package main
+package app
 
 import (
-	"assingment4/config"
-	"assingment4/grpc/server"
-	"assingment4/proto/pb"
-	"assingment4/repository"
-	"assingment4/services"
+	protos "assingment4/internal/api/v1"
+	"assingment4/internal/config"
+	"assingment4/internal/repository"
+	"assingment4/internal/server"
+	"assingment4/internal/services"
 	"flag"
 	"fmt"
 	"google.golang.org/grpc"
@@ -17,30 +17,32 @@ var (
 	port = flag.Int("port", 50051, "The server port")
 )
 
-func main() {
+type app struct {
+	server *server.Server
+}
+
+func AppInit() (*app, error) {
 	cfg, err := config.New()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	log.Println(cfg)
 	userRepo, err := repository.NewUserRepository(cfg)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	userService := services.NewUserService(userRepo)
-
 	handler := server.NewHandler(userService)
+	return &app{server: handler}, nil
+}
 
-	flag.Parse()
+func (app *app) Run() error {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		return err
 	}
 	s := grpc.NewServer()
-	pb.RegisterUserServiceServer(s, handler)
+	protos.RegisterUserServiceServer(s, app.server)
 	log.Printf("server listening at %v", lis.Addr())
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
-
+	return s.Serve(lis)
 }

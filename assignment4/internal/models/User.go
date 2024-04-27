@@ -1,6 +1,6 @@
 package models
 
-import "assingment4/proto/pb"
+import protos "assingment4/internal/api/v1"
 
 type User struct {
 	Id    int32  `json:"id"`
@@ -8,7 +8,7 @@ type User struct {
 	Email string `json:"email" gorm:"unique"`
 }
 
-func UserPbMessageToStruct(user *pb.User) *User {
+func UserPbMessageToStruct(user *protos.User) *User {
 	return &User{
 		Id:    user.GetId(),
 		Name:  user.GetName(),
