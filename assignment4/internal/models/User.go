@@ -1,6 +1,8 @@
 package models
 
-import protos "assingment4/internal/api/v1"
+import (
+	protos "assingment4/api/v1"
+)
 
 type User struct {
 	Id    int32  `json:"id"`

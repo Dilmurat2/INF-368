@@ -1,7 +1,7 @@
 package app
 
 import (
-	protos "assingment4/internal/api/v1"
+	protos "assingment4/api/v1"
 	"assingment4/internal/config"
 	"assingment4/internal/repository"
 	"assingment4/internal/server"
